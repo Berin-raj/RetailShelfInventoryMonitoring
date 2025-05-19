@@ -1,31 +1,53 @@
 # RetailShelfInventoryMonitoring
-Retail self-inventory monitoring refers to the process by which retail businesses independently track and manage their inventory using in-house tools, systems, and staff—without relying entirely on third-party inventory services or full manual audits.
-1.Key Characteristics:
-                Self-managed: Handled internally by store employees or management.
-                Technology-enabled: Often uses inventory management software, barcode scanners, RFID, or mobile apps.
-                Real-time or periodic: Inventory can be updated live or through scheduled counts (like daily, weekly, or monthly cycle counts).
-2.PURPOSE:
-  Accuracy in Stock Levels
-                Ensures real-time visibility into inventory, helping avoid overstocking or stockouts.
-                   Detects discrepancies between actual stock and inventory records early.
-  Operational Efficiency
-                Reduces dependency on manual stocktakes or third-party counts.
-                Enables faster decision-making around reordering, promotions, or markdowns.
-Cost Control
-                Minimizes losses due to theft, shrinkage, or spoilage by identifying issues promptly.
-                Lowers costs by reducing the need for external inventory services.
- Data-Driven Insights
-                Provides data for forecasting demand, identifying fast- and slow-moving items, and optimizing product assortment.
-                Enhances reporting and analysis for better business planning.
-.Process Automation & Accountability
-                    Automates repetitive inventory checks with tools like mobile apps or RFID scanners.
-                         Promotes accountability by assigning responsibility to store employees or departments.
-. Compliance & Audit Readiness
-                        Maintains consistent records that support internal audits and compliance with financial reporting 
-3.USAGE:
-      Daily/Weekly Stock Checks
-                        Staff use mobile devices, scanners, or inventory software to check stock levels on the floor and in the backroom.
-                        Helps detect missing or misplaced items quickly.
 
+from ultralytics import YOLO
 
-    
+import cv2
+
+\# Load the YOLO model
+
+model = YOLO('yolov8n.pt')
+
+\# Path to the image to process
+
+image\_path = 'shelf\_or\_wall.jpg'
+
+\# Load the image using OpenCV
+
+image = cv2.imread(image\_path)
+
+\# Perform object detection
+
+results = model(image)\[0\]
+
+\# Count the number of detected objects
+
+object\_count = len(results.boxes)
+
+\# Draw bounding boxes on the image for each detected object
+
+for box in results.boxes:
+
+x1, y1, x2, y2 = map(int, box.xyxy\[0\])
+
+cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
+
+\# Add text displaying the object count
+
+cv2.putText(image, f'Objects: {object\_count}', (30, 40),
+
+cv2.FONT\_HERSHEY\_SIMPLEX, 1, (255, 0, 0), 2)
+
+\# Display the image with detections
+
+cv2.imshow("Wall Detection Count", image)
+
+\# Wait for a key press before closing the window
+
+cv2.waitKey(0)
+
+cv2.destroyAllWindows()
+
+\# Print the total number of objects detected
+
+print(f"Total objects detected: {object\_count}")
